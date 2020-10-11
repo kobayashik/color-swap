@@ -27,3 +27,12 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+## To Do List
+
+- [] Copy on convert
+- [] Separate logic into components
+- [] Handle malformed colors
+- [] Basic Animations
+- [] Host it

@@ -31,8 +31,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## To Do List
 
-- [] Copy on convert
-- [] Separate logic into components
+- [X] Copy on convert
+- [X] Separate logic into components
 - [] Handle malformed colors
 - [] Basic Animations
 - [] Host it

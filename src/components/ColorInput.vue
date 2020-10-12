@@ -1,8 +1,5 @@
 <template>
-  <span class="error-message" v-if="hasError">:( Try again</span>
-
   <input
-    v-else
     title="ColorInput"
     type="text"
     name="colorInput"
@@ -10,22 +7,24 @@
     readonly
     v-on:dblclick="copyInputTextToClipboard"
     v-on:click="copyInputTextToClipboard"
-    :style="inputStyle"
+    :style="{ color: color }"
     :value="color"
+    v-if="color"
   />
-</template>
 
+  <span class="error-message" v-else>:( Try again</span>
+</template>
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import { fromString } from "css-color-converter";
 
-export default class ColorInput extends Vue {
-  color = "#9bf6ff";
-  hasError = false;
+function getRandomColor() {
+  const COLORS: string[] = ["#c9f4fe", "#b2f1d8", "#fffee3", "#ffb3c8"];
+  return COLORS[Math.floor(Math.random() * COLORS.length)];
+}
 
-  inputStyle = {
-    color: this.color
-  };
+export default class ColorInput extends Vue {
+  color: string | null = getRandomColor()
 
   mounted() {
     document.addEventListener("paste", this.handlePaste);
@@ -36,8 +35,10 @@ export default class ColorInput extends Vue {
   }
 
   copyInputTextToClipboard() {
-    (this.$refs.colorInput as HTMLInputElement).select();
-    document.execCommand("copy");
+    setTimeout(() => {
+      (this.$refs.colorInput as HTMLInputElement).select();
+      document.execCommand("copy");
+    });
   }
 
   handlePaste(event: ClipboardEvent) {
@@ -57,29 +58,26 @@ export default class ColorInput extends Vue {
         this.color = fromString(color).toHexString();
       }
 
-      console.log(this.color);
-
-      this.hasError = false;
+      this.copyInputTextToClipboard();
     } catch (err) {
-      this.hasError = true;
-      console.log(err);
+      this.color = null;
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-  .error-message {
-    font-size: 4rem;
-    color: #ea6464;
-    font-weight: 600;
-  }
+.error-message {
+  font-size: 4rem;
+  color: #ea6464;
+  font-weight: 600;
+}
 
-  input {
-    font-size: 4rem;
-    font-weight: 800;
-    border: none;
-    background: none;
-    text-align: center;
-  }
+input {
+  font-size: 4rem;
+  font-weight: 800;
+  border: none;
+  background: none;
+  text-align: center;
+}
 </style>

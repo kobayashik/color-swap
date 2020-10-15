@@ -1,7 +1,34 @@
 body {
-	background-color: #3a3d46;
+  background-color: #3a3d46;
 }
 
 * {
-	font-family: source-code-pro, Consolas, monaco, monospace;
+  font-family: source-code-pro, Consolas, monaco, monospace;
+}
+
+.fade-leave-active,
+.fade-enter-active {
+  transition: 0.15s ease-out;
+}
+
+.fade-enter-from {
+  opacity: 0;
+}
+
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-fade-enter-active {
+  transition: all .5s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all .5s ease-in;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translatex(20px);
+  opacity: 0;
 }

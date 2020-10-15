@@ -33,6 +33,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 - [X] Copy on convert
 - [X] Separate logic into components
-- [] Handle malformed colors
-- [] Basic Animations
-- [] Host it
+- [ ] Handle malformed colors
+- [X] Simple Animations
+- [ ] Host it

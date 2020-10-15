@@ -1,18 +1,24 @@
 <template>
-  <input
-    title="ColorInput"
-    type="text"
-    name="colorInput"
-    ref="colorInput"
-    readonly
-    v-on:dblclick="copyInputTextToClipboard"
-    v-on:click="copyInputTextToClipboard"
-    :style="{ color: color }"
-    :value="color"
-    v-if="color"
-  />
+  <transition
+    name="fade"
+    mode="out-in"
+    v-on:after-leave="copyInputTextToClipboard"
+    v-if="color">
+    <div class="instructions" :key="color">
+      <input
+        title="ColorInput"
+        type="text"
+        name="colorInput"
+        ref="colorInput"
+        readonly
+        v-on:dblclick="copyInputTextToClipboard"
+        :style="{ color: color }"
+        :value="color"
+      />
+    </div>
+  </transition>
 
-  <span class="error-message" v-else>:( Try again</span>
+  <span v-else class="error-message">:( Try again</span>
 </template>
 <script lang="ts">
 import { Vue } from "vue-class-component";
@@ -24,7 +30,7 @@ function getRandomColor() {
 }
 
 export default class ColorInput extends Vue {
-  color: string | null = getRandomColor()
+  color: string | null = getRandomColor();
 
   mounted() {
     document.addEventListener("paste", this.handlePaste);
@@ -36,8 +42,10 @@ export default class ColorInput extends Vue {
 
   copyInputTextToClipboard() {
     setTimeout(() => {
-      (this.$refs.colorInput as HTMLInputElement).select();
-      document.execCommand("copy");
+      if (this.$refs.colorInput) {
+        (this.$refs.colorInput as HTMLInputElement).select();
+        document.execCommand("copy");
+      }
     });
   }
 
@@ -57,8 +65,6 @@ export default class ColorInput extends Vue {
       } else {
         this.color = fromString(color).toHexString();
       }
-
-      this.copyInputTextToClipboard();
     } catch (err) {
       this.color = null;
     }

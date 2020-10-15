@@ -1,18 +1,35 @@
 <template>
   <span class="instructions">
-    Paste to convert from <b>HEX</b> to <b>RGB(A)</b>
+    Paste to convert from
+    <transition name="slide-fade" mode="out-in">
+      <div class="color-types" :key="colorTypes[0]">
+        <b>{{ colorTypes[0] }}</b> to <b>{{ colorTypes[1] }}</b>
+      </div>
+    </transition>
   </span>
 </template>
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
 
-export default class UserInstructions extends Vue {}
+export default class UserInstructions extends Vue {
+  colorTypes = ["HEX", "RGB"];
+
+  mounted() {
+    setInterval(() => (this.colorTypes = this.colorTypes.reverse()), 4000);
+  }
+}
 </script>
 
 <style scoped lang="scss">
-  .instructions {
-    color: #f8f8f2;
-    user-select: none;
-  }
+.instructions {
+	margin: 0 10px;
+	display: flex;
+  color: #f8f8f2;
+  user-select: none;
+}
+
+.color-types {
+	margin: 0 10px;
+}
 </style>

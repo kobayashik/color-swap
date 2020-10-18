@@ -6,6 +6,10 @@ body {
   font-family: source-code-pro, Consolas, monaco, monospace;
 }
 
+.no-select {
+  user-select: none;
+}
+
 .fade-leave-active,
 .fade-enter-active {
   transition: 0.15s ease-out;
@@ -16,6 +20,22 @@ body {
 }
 
 .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-up-leave-active,
+.fade-up-enter-active {
+  visibility: visible;
+  transition: .7s ease-out;
+}
+
+.fade-up-enter-from {
+  transform: translatey(-10px);
+  opacity: 0;
+}
+
+.fade-up-leave-to {
+  /* transform: translatey(-20px); */
   opacity: 0;
 }
 

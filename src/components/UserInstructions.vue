@@ -1,5 +1,5 @@
 <template>
-  <span class="instructions">
+  <span class="instructions no-select">
     Paste to convert from
     <transition name="slide-fade" mode="out-in">
       <div class="color-types" :key="colorTypes[0]">
@@ -23,13 +23,12 @@ export default class UserInstructions extends Vue {
 
 <style scoped lang="scss">
 .instructions {
-	margin: 0 10px;
-	display: flex;
+  margin: 0 10px;
+  display: flex;
   color: #f8f8f2;
-  user-select: none;
 }
 
 .color-types {
-	margin: 0 10px;
+  margin: 0 10px;
 }
 </style>

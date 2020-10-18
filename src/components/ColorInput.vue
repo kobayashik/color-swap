@@ -1,23 +1,33 @@
 <template>
+  <transition name="fade-up" mode="out-in" v-on:transitionend="hideText">
+    <span
+      class="no-select"
+      v-if="wasCopied"
+      style="position: absolute; top: -20px;"
+      >Copied!</span
+    >
+  </transition>
+
   <transition
     name="fade"
     mode="out-in"
     v-on:after-leave="copyInputTextToClipboard"
-    v-if="color">
-    <div class="instructions" :key="color">
+    v-if="color"
+  >
+    <div :key="color">
       <input
         title="ColorInput"
         type="text"
         name="colorInput"
         ref="colorInput"
         readonly
-        v-on:dblclick="copyInputTextToClipboard"
+        v-on:click="selectInput"
+        v-on:dblclick="selectInput"
         :style="{ color: color }"
         :value="color"
       />
     </div>
   </transition>
-
   <span v-else class="error-message">:( Try again</span>
 </template>
 <script lang="ts">
@@ -30,21 +40,41 @@ function getRandomColor() {
 }
 
 export default class ColorInput extends Vue {
+  wasCopied = false;
   color: string | null = getRandomColor();
 
   mounted() {
     document.addEventListener("paste", this.handlePaste);
+    document.addEventListener("copy", this.copyInputTextToClipboard);
   }
 
   beforeDestroy() {
     document.removeEventListener("paste", this.handlePaste);
+    document.removeEventListener("copy", this.copyInputTextToClipboard);
+  }
+
+  hideText() {
+    this.wasCopied = false;
+  }
+
+  selectInput() {
+    if (this.$refs.colorInput) {
+      (this.$refs.colorInput as HTMLInputElement).select();
+    }
   }
 
   copyInputTextToClipboard() {
     setTimeout(() => {
-      if (this.$refs.colorInput) {
-        (this.$refs.colorInput as HTMLInputElement).select();
-        document.execCommand("copy");
+      this.selectInput();
+      if (this.color) {
+        navigator.clipboard.writeText(this.color).then(
+          () => {
+            this.wasCopied = true;
+          },
+          err => {
+            console.error(err);
+          }
+        );
       }
     });
   }
@@ -80,6 +110,7 @@ export default class ColorInput extends Vue {
 }
 
 input {
+  cursor: pointer;
   font-size: 4rem;
   font-weight: 800;
   border: none;

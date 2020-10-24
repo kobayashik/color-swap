@@ -114,6 +114,7 @@ input {
   font-size: 4rem;
   font-weight: 800;
   border: none;
+  outline: none;
   background: none;
   text-align: center;
 }

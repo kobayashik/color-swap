@@ -27,14 +27,4 @@ export default class App extends Vue {}
   -moz-osx-font-smoothing: grayscale;
   color: #fff;
 }
-
-.centered {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 </style>

@@ -35,7 +35,7 @@ import { Vue } from "vue-class-component";
 import { fromString } from "css-color-converter";
 
 function getRandomColor() {
-  const COLORS: string[] = ["#c9f4fe", "#b2f1d8", "#fffee3", "#ffb3c8"];
+  const COLORS: string[] = ["#c9f4fe", "rgb(201, 244, 254)", "#b2f1d8", "rgb(178, 241, 216)", "#fffee3", "rgb(255, 254, 227)", "#ffb3c8", "rgb(255, 179, 200)"];
   return COLORS[Math.floor(Math.random() * COLORS.length)];
 }
 

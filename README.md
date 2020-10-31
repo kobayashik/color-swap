@@ -35,4 +35,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - [X] Separate logic into components
 - [ ] Handle malformed colors
 - [X] Simple Animations
-- [ ] Host it
+- [X] Host it

@@ -1,13 +1,98 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: source-code-pro, Consolas, monaco, monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  font-size: 16px;
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: #3a3d46;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+p {
+  /* text-align: center; */
+  margin: 0;
+}
+
+input {
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  margin: 0;
+}
+
+.color {
+  font-size: 4rem;
+  font-weight: bold;
+}
+
+.instructions {
+  color: white;
+  display: flex;
+  justify-content: center;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tooltip {
+  visibility: visible;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+  /* opacity: 0; */
+  transition: opacity 0.3s;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.fade-in {
+  transition: opacity 0.4s ease;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+kbd {
+  border-radius: 3px;
+  padding: 0 4px;
+  margin: 2px;
+  font-size: 0.9rem;
+  vertical-align: text-bottom;
+  background: white;
+  border: 1px solid #555;
+  color: #555;
+  font-variant: small-caps;
+  font-weight: bold;
+  letter-spacing: 1.5px;
 }

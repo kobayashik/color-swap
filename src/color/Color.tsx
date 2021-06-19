@@ -10,7 +10,7 @@ const Color: React.FC<ColorProps> = ({color, copied, setCopied}: ColorProps) => 
   const myRef = createRef<HTMLInputElement>()
 
   function handleDoubleClick(event: React.MouseEvent<HTMLInputElement, MouseEvent>) {
-    event.preventDefault()
+    event.stopPropagation()
 
     return false;
   }
@@ -18,14 +18,17 @@ const Color: React.FC<ColorProps> = ({color, copied, setCopied}: ColorProps) => 
 
 useEffect(() => {
   if(copied) {
+    console.log("copied")
     if(myRef && myRef.current) {
       myRef.current.select()
+
+      console.log(myRef.current.value)
     }
   }
-}, [copied, myRef])
+}, [copied])
 
   return (
-    <input ref={myRef} onDoubleClick={(event) => handleDoubleClick(event)} className="color" style={{ color }} defaultValue={color} />
+    <input ref={myRef} onDoubleClick={(event) => handleDoubleClick(event)} className="color" style={{ color }} readOnly value={color} />
   )
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Instructions: React.FC<{}> = () => {
   const useMacBindings = navigator.platform.toLowerCase().includes('mac')
@@ -17,10 +17,41 @@ const Instructions: React.FC<{}> = () => {
     </>);
   }
 
+  const [isActive, setIsActive] = useState(true)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsActive(!isActive);
+
+    }, 1000)
+
+    return (() => clearInterval(interval))
+
+  }, [isActive, setIsActive])
+
+  // /'slide-fade-enter-active slide-fade-leave-to'
+
+
+  function fadeInTransition() {
+
+  }
+
+  function fadeOutTransition() {
+    // {
+      
+       
+    //    ) }
+  }
+
+
   return (
     <div className="instructions">
       <div>
-        <p>Paste to convert from HEX to RGB</p>
+        <p style={{ 'marginBottom': '10px' }}>
+          <div className={(isActive ? 'slide-fade-leave-active' : 'slide-fade-enter-active slide-fade-leave-to')}><strong>HEX</strong> to <strong>RGB</strong></div>
+          <div className={(!isActive ? 'slide-fade-leave-active' : 'slide-fade-enter-active slide-fade-leave-to')}><strong>RGB</strong> to <strong>HEX</strong></div>
+
+        </p>
         <p>{ getCopyKeybindings() }</p>
         <p>{ getPasteKeybindings() }</p>
       </div>

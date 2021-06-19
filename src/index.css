@@ -42,7 +42,6 @@ input {
 }
 
 .tooltip {
-  visibility: visible;
   width: 120px;
   background-color: #555;
   color: #fff;
@@ -54,7 +53,7 @@ input {
   bottom: 100%;
   left: 50%;
   margin-left: -60px;
-  /* opacity: 0; */
+  opacity: 0;
   transition: opacity 0.3s;
 }
 
@@ -75,12 +74,27 @@ input {
 }
 
 .fade-in {
+  opacity: 1;
   transition: opacity 0.4s ease;
 }
 
 .fade-out {
   opacity: 0;
   transition: opacity 0.4s ease;
+}
+
+.slide-fade-enter-active {
+  transition: all .5s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all .5s ease-in;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translatex(20px);
+  opacity: 0;
 }
 
 kbd {

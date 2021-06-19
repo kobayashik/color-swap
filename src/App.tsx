@@ -6,28 +6,60 @@ import { fromString } from "css-color-converter";
 
 function App() {
   const RANDOM_STARTING_COLORS: string[] = ["#c9f4fe", "rgb(201, 244, 254)", "#b2f1d8", "rgb(178, 241, 216)", "#fffee3", "rgb(255, 254, 227)", "#ffb3c8", "rgb(255, 179, 200)"];
-  const [color, setColor] = useState('#c9f4fe')
+  const [outputColor, setColor] = useState(RANDOM_STARTING_COLORS[Math.floor(Math.random() * RANDOM_STARTING_COLORS.length)])
   const [copied, setCopied] = useState(false)
-  const [isActive, setIsActive] = useState(false)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     function handlePasteColor(event: ClipboardEvent) {
-      const _color = event.clipboardData?.getData('Text');
+      const _color = event.clipboardData?.getData('Text').trim();
       if (_color) {
-        const isHex = /#?([a-fA-F0-9]{3,6,8})$/gi.test(color);
-        setColor(isHex ? fromString(_color).toRgbString() : fromString(_color).toHexString());
+        console.log("copied", _color)
+
+        if (isHexColor(_color)) {
+          console.log('I AM HEX')
+        }
+
+
+        let color = _color;
+
+        try {
+          color = isHexColor(_color) ? toRGB(_color) : toHex(_color)
+        } catch (e) {
+          console.log('error')
+        }
+
+
+        setColor(color)
+
+        console.log(color)
       }
     }
 
     window.addEventListener('paste', handlePasteColor);
     return () => window.removeEventListener('paste', handlePasteColor);
-  }, [color]);
+  }, []);
+
+
+  function isHexColor(input: string) {
+    return /#?([a-fA-F0-9]{8}|[a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/gi.test(input);
+  }
+
+  function toHex(color: string) {
+    return fromString(color).toHexString();
+  }
+
+  function toRGB(color: string) {
+    return fromString(color).toRgbString();
+  }
+
 
   useEffect(() => {
-    function handleCopyColor() {
-      navigator.clipboard.writeText(color)
+    function handleCopyColor(event) {
+      event.preventDefault();
+      navigator.clipboard.writeText(outputColor)
         .then(
-          () => { setCopied(true)},
+          () => { setCopied(true) },
           (err) => console.log(err)
         );
     }
@@ -40,21 +72,25 @@ function App() {
   const [fade, setFade] = useState<string | null>(null)
 
   useEffect(() => {
+    if (copied) {
+      setFade('fade-in')
+    }
+
     const timeout = setTimeout(() => {
-      if (fade === 'fade-in') {
+      if (copied) {
         setFade('fade-out')
-      } else if (fade === 'fade-out') {
-        setFade('fade-in')
+        setCopied(false)
       }
-    }, 3000);
+
+    }, 1000);
 
     return () => clearTimeout(timeout)
-  }, [isActive, setIsActive])
+  }, [copied])
 
   return (
     <div style={{ 'position': 'relative' }}>
-      <p className={'tooltip ' + 'fade-in'}>Copied!</p>
-      <Color color={color} copied={copied} setCopied={setCopied}/>
+      <p className={'tooltip ' + fade}>Copied!</p>
+      <Color color={outputColor} copied={copied} setCopied={setCopied} />
       <Instructions />
     </div>
   );

@@ -3,42 +3,28 @@ import Color from './color/Color';
 import Instructions from './instructions/Instructions';
 import { fromString } from "css-color-converter";
 
-
 function App() {
   const RANDOM_STARTING_COLORS: string[] = ["#c9f4fe", "rgb(201, 244, 254)", "#b2f1d8", "rgb(178, 241, 216)", "#fffee3", "rgb(255, 254, 227)", "#ffb3c8", "rgb(255, 179, 200)"];
   const [outputColor, setColor] = useState(RANDOM_STARTING_COLORS[Math.floor(Math.random() * RANDOM_STARTING_COLORS.length)])
-  const [copied, setCopied] = useState(false)
-  const [error, setError] = useState(false)
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     function handlePasteColor(event: ClipboardEvent) {
-      const _color = event.clipboardData?.getData('Text').trim();
-      if (_color) {
-        console.log("copied", _color)
-
-        if (isHexColor(_color)) {
-          console.log('I AM HEX')
-        }
-
-
-        let color = _color;
-
+      const data = event.clipboardData?.getData('Text').trim();
+      if (data) {
         try {
-          color = isHexColor(_color) ? toRGB(_color) : toHex(_color)
+          const color = isHexColor(data) ? toRGB(data) : toHex(data)
+          setColor(color)
+
         } catch (e) {
           console.log('error')
         }
-
-
-        setColor(color)
-
-        console.log(color)
       }
     }
 
     window.addEventListener('paste', handlePasteColor);
     return () => window.removeEventListener('paste', handlePasteColor);
-  }, []);
+  }, [outputColor, setColor]);
 
 
   function isHexColor(input: string) {
@@ -53,7 +39,6 @@ function App() {
     return fromString(color).toRgbString();
   }
 
-
   useEffect(() => {
     function handleCopyColor(event) {
       event.preventDefault();
@@ -66,7 +51,7 @@ function App() {
 
     window.addEventListener('copy', handleCopyColor);
     return () => window.removeEventListener('copy', handleCopyColor);
-  }, []);
+  }, [outputColor]);
 
 
   const [fade, setFade] = useState<string | null>(null)
@@ -82,7 +67,7 @@ function App() {
         setCopied(false)
       }
 
-    }, 1000);
+    }, 500);
 
     return () => clearTimeout(timeout)
   }, [copied])

@@ -3,7 +3,7 @@ import Color from './color/color.component';
 import Instructions from './instructions/instructions.component';
 import Tooltip from './tooltip/tooltip.component';
 import { convertColorToHex, convertColorToRGB } from './utils/utils';
-import Error from './error/error.component';
+import ErrorMessage from './error-message/error-message.component';
 
 function App() {
   function getRandomColor() {
@@ -72,7 +72,7 @@ function App() {
   return (
     <div style={{ position: 'relative' }}>
       <Tooltip active={copied} />
-      {(error ? <Error /> : <Color color={color} copied={copied} />)}
+      {(error ? <ErrorMessage /> : <Color color={color} copied={copied} />)}
       <Instructions />
     </div>
   );

@@ -1,11 +1,12 @@
 import React, { createRef, useEffect } from 'react';
+import style from './color.module.scss';
 
 type ColorProps = {
   color: string;
   copied: boolean;
 }
 
-const Color: React.FC<ColorProps> = ({ color, copied }: ColorProps) => {
+const Color = ({ color, copied }: ColorProps) => {
   const colorInput = createRef<HTMLInputElement>();
 
   useEffect(() => {
@@ -15,7 +16,7 @@ const Color: React.FC<ColorProps> = ({ color, copied }: ColorProps) => {
   }, [copied, colorInput]);
 
   return (
-    <input ref={colorInput} className="color" style={{ color }} readOnly value={color} />
+    <input ref={colorInput} className={style.color} style={{ color }} readOnly value={color} />
   );
 };
 

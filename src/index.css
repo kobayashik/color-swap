@@ -12,27 +12,7 @@ body {
 }
 
 p {
-  /* text-align: center; */
   margin: 0;
-}
-
-input {
-  text-align: center;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  margin: 0;
-}
-
-.color {
-  font-size: 4rem;
-  font-weight: bold;
-}
-
-.instructions {
-  color: white;
-  display: flex;
-  justify-content: center;
 }
 
 .center {
@@ -57,7 +37,6 @@ input {
   transition: opacity 0.3s;
 }
 
-/* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
@@ -83,30 +62,6 @@ input {
   transition: opacity 0.4s ease;
 }
 
-.slide-fade-enter-active {
-  transition: all .5s ease-out;
-}
-
-.slide-fade-leave-active {
-  transition: all .5s ease-in;
-}
-
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translatex(20px);
-  opacity: 0;
-}
-
-kbd {
-  border-radius: 3px;
-  padding: 0 4px;
-  margin: 2px;
-  font-size: 0.9rem;
-  vertical-align: text-bottom;
-  background: white;
-  border: 1px solid #555;
-  color: #555;
-  font-variant: small-caps;
-  font-weight: bold;
-  letter-spacing: 1.5px;
+.react-card-flip {
+  display: inline-block;
 }

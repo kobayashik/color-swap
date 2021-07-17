@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import Color from './color/Color';
-import Instructions from './instructions/Instructions';
-import Tooltip from './tooltip/Tooltip';
+import Color from './color/color.component';
+import Instructions from './instructions/instructions.component';
+import Tooltip from './tooltip/tooltip.component';
 import { convertColorToHex, convertColorToRGB } from './utils/utils';
+import Error from './error/error.component';
 
 function App() {
   const [color, setColor] = useState<string>('');
-  const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string>('');
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const STARTING_COLORS: string[] = ['#c9f4fe', 'rgb(201, 244, 254)', '#b2f1d8', 'rgb(178, 241, 216)', '#fffee3', 'rgb(255, 254, 227)', '#ffb3c8', 'rgb(255, 179, 200)'];
@@ -27,6 +28,7 @@ function App() {
           } else {
             setColor(convertColorToHex(data));
           }
+          setError('');
         } catch (err) {
           setError('Could not parse color :(');
         }
@@ -35,7 +37,7 @@ function App() {
 
     window.addEventListener('paste', handleSetColorOnPaste);
     return () => window.removeEventListener('paste', handleSetColorOnPaste);
-  }, [setColor]);
+  }, [setColor, setError]);
 
   useEffect(() => {
     async function handleCopyColorToClipboard(event) {
@@ -62,9 +64,8 @@ function App() {
 
   return (
     <div style={{ position: 'relative' }}>
-      {error}
       <Tooltip active={copied} />
-      <Color color={color} copied={copied} />
+      {(error ? <Error /> : <Color color={color} copied={copied} />)}
       <Instructions />
     </div>
   );

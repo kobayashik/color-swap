@@ -6,8 +6,8 @@ type ColorProps = {
   setCopied: (copied: boolean) => void
 }
 
-const Color: React.FC<ColorProps> = ({color, copied, setCopied}: ColorProps) => {
-  const myRef = createRef<HTMLInputElement>()
+const Color: React.FC<ColorProps> = ({ color, copied, setCopied }: ColorProps) => {
+  const colorInput = createRef<HTMLInputElement>()
 
   function handleDoubleClick(event: React.MouseEvent<HTMLInputElement, MouseEvent>) {
     event.stopPropagation()
@@ -16,19 +16,15 @@ const Color: React.FC<ColorProps> = ({color, copied, setCopied}: ColorProps) => 
   }
 
 
-useEffect(() => {
-  if(copied) {
-    console.log("copied")
-    if(myRef && myRef.current) {
-      myRef.current.select()
-
-      console.log(myRef.current.value)
+  useEffect(() => {
+    if (copied && colorInput.current) {
+      console.log("updared")
+      colorInput.current.select()
     }
-  }
-}, [copied])
+  }, [copied, colorInput])
 
   return (
-    <input ref={myRef} onDoubleClick={(event) => handleDoubleClick(event)} className="color" style={{ color }} readOnly value={color} />
+    <input ref={colorInput} onDoubleClick={(event) => handleDoubleClick(event)} className="color" style={{ color }} readOnly value={color} />
   )
 }
 

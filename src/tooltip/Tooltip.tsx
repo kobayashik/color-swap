@@ -4,7 +4,7 @@ type TooltipProps = {
   active: boolean;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ active }: TooltipProps) => {
+function Tooltip({ active }: TooltipProps) {
   return (<p className={`tooltip ${active ? 'fade-in' : 'fade-out'}`}>Copied!</p>);
 }
 

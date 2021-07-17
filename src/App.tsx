@@ -8,6 +8,7 @@ function App() {
   const RANDOM_STARTING_COLORS: string[] = ["#c9f4fe", "rgb(201, 244, 254)", "#b2f1d8", "rgb(178, 241, 216)", "#fffee3", "rgb(255, 254, 227)", "#ffb3c8", "rgb(255, 179, 200)"];
   const [outputColor, setColor] = useState(RANDOM_STARTING_COLORS[Math.floor(Math.random() * RANDOM_STARTING_COLORS.length)])
   const [copied, setCopied] = useState(false);
+  const [error, setError] = useState<string>('')
 
   useEffect(() => {
     function handlePasteColor(event: ClipboardEvent) {
@@ -28,17 +29,17 @@ function App() {
   }, [outputColor, setColor]);
 
   useEffect(() => {
-    function handleCopyColor(event) {
+    async function handleCopyWindowEvent(event) {
       event.preventDefault();
-      navigator.clipboard.writeText(outputColor)
-        .then(
-          () => { setCopied(true) },
-          (err) => console.log(err)
-        );
+      try {
+        await navigator.clipboard.writeText(outputColor);
+      } catch (err) {
+        setError('Error copying from Clipboard');
+      }
     }
 
-    window.addEventListener('copy', handleCopyColor);
-    return () => window.removeEventListener('copy', handleCopyColor);
+    window.addEventListener('copy', handleCopyWindowEvent);
+    return () => window.removeEventListener('copy', handleCopyWindowEvent);
   }, [outputColor]);
 
   useEffect(() => {

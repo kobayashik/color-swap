@@ -5,16 +5,24 @@ import Tooltip from './tooltip/tooltip.component';
 import { convertColorToHex, convertColorToRGB } from './utils/utils';
 import Error from './error/error.component';
 
+function getRandomColor() {
+  const STARTING_COLORS: string[] = ['#c9f4fe', 'rgb(201, 244, 254)', '#b2f1d8', 'rgb(178, 241, 216)', '#fffee3', 'rgb(255, 254, 227)', '#ffb3c8', 'rgb(255, 179, 200)'];
+  return STARTING_COLORS[Math.floor(Math.random() * STARTING_COLORS.length)];
+}
+
 function App() {
-  const [color, setColor] = useState<string>('');
+  const [color, setColor] = useState<string>(getRandomColor());
   const [error, setError] = useState<string>('');
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    const STARTING_COLORS: string[] = ['#c9f4fe', 'rgb(201, 244, 254)', '#b2f1d8', 'rgb(178, 241, 216)', '#fffee3', 'rgb(255, 254, 227)', '#ffb3c8', 'rgb(255, 179, 200)'];
-    const startingColor = STARTING_COLORS[Math.floor(Math.random() * STARTING_COLORS.length)];
-    setColor(startingColor);
-  }, []);
+  async function copyToClipboard(text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+    } catch (err) {
+      setError('Error copying from Clipboard');
+    }
+  }
 
   useEffect(() => {
     async function handleSetColorOnPaste(event: ClipboardEvent) {
@@ -23,11 +31,15 @@ function App() {
       if (event.clipboardData) {
         const data = event.clipboardData.getData('Text').trim();
         try {
+          let convertedColor = '';
           if (HEX_REGEX.test(data)) {
-            setColor(convertColorToRGB(data));
+            convertedColor = convertColorToRGB(data);
           } else {
-            setColor(convertColorToHex(data));
+            convertedColor = convertColorToHex(data);
           }
+
+          copyToClipboard(convertedColor);
+          setColor(convertedColor);
           setError('');
         } catch (err) {
           setError('Could not parse color :(');
@@ -42,12 +54,7 @@ function App() {
   useEffect(() => {
     async function handleCopyColorToClipboard(event) {
       event.preventDefault();
-      try {
-        await navigator.clipboard.writeText(color);
-        setCopied(true);
-      } catch (err) {
-        setError('Error copying from Clipboard');
-      }
+      copyToClipboard(color);
     }
 
     window.addEventListener('copy', handleCopyColorToClipboard);

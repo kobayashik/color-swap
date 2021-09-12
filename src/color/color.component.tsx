@@ -10,9 +10,7 @@ const Color = ({ color, copied }: ColorProps) => {
   const colorInput = createRef<HTMLInputElement>();
 
   useEffect(() => {
-    if (copied && colorInput.current) {
-      colorInput.current.select();
-    }
+    colorInput.current?.select();
   }, [copied, colorInput]);
 
   return (

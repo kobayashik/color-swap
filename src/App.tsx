@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { ThemeProvider } from 'styled-components';
 import Color from './color/color.component';
 import Instructions from './instructions/instructions.component';
 import Tooltip from './tooltip/tooltip.component';
 import { convertColorToHex, convertColorToRGB } from './utils/utils';
 import ErrorMessage from './error-message/error-message.component';
+import { darkTheme, GlobalStyle } from './theme';
 
 function App() {
   function getRandomColor() {
@@ -70,11 +72,14 @@ function App() {
   }, [copied]);
 
   return (
-    <div style={{ position: 'relative' }}>
-      <Tooltip active={copied} />
-      {(error ? <ErrorMessage /> : <Color color={color} copied={copied} />)}
-      <Instructions />
-    </div>
+    <ThemeProvider theme={darkTheme}>
+      <GlobalStyle />
+      <div style={{ position: 'relative' }}>
+        <Tooltip active={copied} />
+        {(error ? <ErrorMessage /> : <Color color={color} copied={copied} />)}
+        <Instructions />
+      </div>
+    </ThemeProvider>
   );
 }
 

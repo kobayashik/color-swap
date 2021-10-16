@@ -24,50 +24,50 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    async function handleSetColorOnPaste(event: ClipboardEvent) {
-      const HEX_REGEX = /#?([a-fA-F0-9]{8}|[a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/gi;
+  // useEffect(() => {
+  //   async function handleSetColorOnPaste(event: ClipboardEvent) {
+  //     const HEX_REGEX = /#?([a-fA-F0-9]{8}|[a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/gi;
 
-      if (event.clipboardData) {
-        const data = event.clipboardData.getData('Text').trim();
-        try {
-          let convertedColor = '';
-          if (HEX_REGEX.test(data)) {
-            convertedColor = convertColorToRGB(data);
-          } else {
-            convertedColor = convertColorToHex(data);
-          }
+  //     if (event.clipboardData) {
+  //       const data = event.clipboardData.getData('Text').trim();
+  //       try {
+  //         let convertedColor = '';
+  //         if (HEX_REGEX.test(data)) {
+  //           convertedColor = convertColorToRGB(data);
+  //         } else {
+  //           convertedColor = convertColorToHex(data);
+  //         }
 
-          copyToClipboard(convertedColor);
-          setColor(convertedColor);
-          setError('');
-        } catch (err) {
-          setError('Could not parse color :(');
-        }
-      }
-    }
+  //         copyToClipboard(convertedColor);
+  //         setColor(convertedColor);
+  //         setError('');
+  //       } catch (err) {
+  //         setError('Could not parse color :(');
+  //       }
+  //     }
+  //   }
 
-    window.addEventListener('paste', handleSetColorOnPaste);
-    return () => window.removeEventListener('paste', handleSetColorOnPaste);
-  }, [setColor, setError]);
+  //   window.addEventListener('paste', handleSetColorOnPaste);
+  //   return () => window.removeEventListener('paste', handleSetColorOnPaste);
+  // }, [setColor, setError]);
 
-  useEffect(() => {
-    async function handleCopyColorToClipboard(event) {
-      event.preventDefault();
-      copyToClipboard(color);
-    }
+  // useEffect(() => {
+  //   async function handleCopyColorToClipboard(event) {
+  //     event.preventDefault();
+  //     copyToClipboard(color);
+  //   }
 
-    window.addEventListener('copy', handleCopyColorToClipboard);
-    return () => window.removeEventListener('copy', handleCopyColorToClipboard);
-  }, [color]);
+  //   window.addEventListener('copy', handleCopyColorToClipboard);
+  //   return () => window.removeEventListener('copy', handleCopyColorToClipboard);
+  // }, [color]);
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (copied) { setCopied(false); }
-    }, 500);
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     if (copied) { setCopied(false); }
+  //   }, 500);
 
-    return () => clearTimeout(timeout);
-  }, [copied]);
+  //   return () => clearTimeout(timeout);
+  // }, [copied]);
 
   return (
     <div style={{ position: 'relative' }}>

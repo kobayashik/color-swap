@@ -21,7 +21,8 @@ p {
 }
 
 .tooltip {
-  width: 120px;
+  font-size: 2rem;
+  width: 150px;
   background-color: #555;
   color: #fff;
   text-align: center;
@@ -29,7 +30,7 @@ p {
   padding: 5px 0;
   position: absolute;
   z-index: 1;
-  bottom: 100%;
+  bottom: 110%;
   left: 50%;
   margin-left: -60px;
   opacity: 0;
@@ -45,8 +46,8 @@ p {
   position: absolute;
   top: 100%;
   left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
+  margin-left: -10px;
+  border-width: 10px;
   border-style: solid;
   border-color: #555 transparent transparent transparent;
 }
@@ -59,8 +60,4 @@ p {
 .fade-out {
   opacity: 0;
   transition: opacity 0.4s ease;
-}
-
-.react-card-flip {
-  display: inline-block;
 }

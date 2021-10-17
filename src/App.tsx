@@ -95,11 +95,13 @@ function App() {
     }
   };
 
+  const onCopy = () => copyToClipboard(color);
+
   return (
     <Wrapper color={color}>
       <InputWrapper>
         <Tooltip active={copied} />
-        <Input copied={copied} color={color} setColor={onSetColor} />
+        <Input copied={copied} color={color} setColor={onSetColor} onCopy={onCopy} />
       </InputWrapper>
       {error && <Error />}
       <Instructions />

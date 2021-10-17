@@ -1,21 +1,7 @@
 import React, { createRef, useEffect, useState } from 'react';
-import Color from 'color';
 import styled from 'styled-components';
-
-const getContrastingColor = (color: string) => {
-  try {
-    const initial = Color(color);
-    const lightness = initial.lightness();
-    const darkened = initial.darken(0.1).fade(0.6).string();
-    const lightened = initial.lightness(lightness + 80).fade(0.8).string();
-
-    return initial.isLight() ? darkened : lightened;
-  } catch (err) {
-    console.log(err);
-  }
-
-  return null;
-};
+import { getContrastingColor, getOpaqueContrastingColor } from '../utils';
+import { CopyButton } from './Copy.component';
 
 export const Wrapper = styled.div`
   position: relative;
@@ -27,14 +13,12 @@ export const Wrapper = styled.div`
 export const StyledInput = styled.input`
   background-color: ${({ color }) => getContrastingColor(color)};
   color: ${({ color }) => color};
-  border-radius: 16px;
+  border-radius: ${({ theme }) => theme.borderRadius};
   border: 2px solid ${({ color }) => getContrastingColor(color)};
-  /* border: transparent; */
   max-width: 610px;
   padding: 10px 20px;
   font-size: 3.5rem;
-  font-weight: 500;
-
+  font-weight: bold;
   outline:none;
 
   &:focus {
@@ -44,24 +28,44 @@ export const StyledInput = styled.input`
 
 export const Preview = styled.div<{ color: string }>`
   position: absolute;
-  top: 13%;
-  right: 12px;
+  top: 15%;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 4rem;
   width: 4rem;
-  border-radius: 16px;
+  border-radius: ${({ theme }) => theme.borderRadius};
+  color: ${({ color }) => getOpaqueContrastingColor(color)};
   background: ${({ color }) => color};
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+
+  &:hover {
+    cursor: pointer;
+    color: ${({ color }) => color};
+    background: ${({ color }) => getOpaqueContrastingColor(color)};
+  }
 `;
 
 type Props = {
   color: string;
   copied: boolean;
+  onCopy: (copied: boolean) => void;
+  // eslint-disable-next-line
   setColor: (color: string) => void;
 }
 
-export const Input = ({ color, setColor, copied }: Props) => {
+export const Input = ({
+  color, setColor, copied, onCopy,
+}: Props) => {
   const colorInput = createRef<HTMLInputElement>();
   const [inputColor, setInputColor] = useState(color);
+
+  useEffect(() => {
+    if (copied && colorInput.current) {
+      colorInput.current.select();
+    }
+  }, [copied, colorInput]);
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -71,24 +75,16 @@ export const Input = ({ color, setColor, copied }: Props) => {
 
   const onChange = (event) => setInputColor(event.target.value);
 
-  useEffect(() => {
-    if (copied && colorInput.current) {
-      colorInput.current.select();
-    }
-  }, [copied, colorInput]);
-
   return (
     <Wrapper>
-      <div>
-        <StyledInput
-          ref={colorInput}
-          color={color}
-          value={inputColor}
-          onKeyDown={handleKeyDown}
-          onChange={onChange}
-        />
-        <Preview color={color} />
-      </div>
+      <StyledInput
+        ref={colorInput}
+        color={color}
+        value={inputColor}
+        onKeyDown={handleKeyDown}
+        onChange={onChange}
+      />
+      <CopyButton color={color} onCopy={onCopy} />
     </Wrapper>
   );
 };

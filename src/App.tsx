@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import Color from 'color';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import Tooltip from './tooltip/tooltip.component';
-import { convertColorToHex, convertColorToRGB } from './utils/utils';
+import { swapColor } from './utils/utils';
 import { Input, Error, Instructions } from './components';
+import colorState, { copiedState } from './state';
+import CopyButton from './components/Copy.component';
 
 const Wrapper = styled.div<{ color: string }>`
   display: flex;
@@ -16,94 +18,59 @@ const Wrapper = styled.div<{ color: string }>`
   /* background-color: ${({ color }) => color}; */
 `;
 
-const InputWrapper = styled.div`
+const RelativeContainer = styled.div`
   position: relative;
 `;
 
 function App() {
-  function getRandomColor() {
-    const STARTING_COLORS: string[] = ['#c9f4fe', 'rgb(201, 244, 254)', '#b2f1d8', 'rgb(178, 241, 216)', '#fffee3', 'rgb(255, 254, 227)', '#ffb3c8', 'rgb(255, 179, 200)'];
-    return STARTING_COLORS[Math.floor(Math.random() * STARTING_COLORS.length)];
-  }
-
-  const [color, setColor] = useState<string>(getRandomColor());
-  const [error, setError] = useState<string>('');
-  const [copied, setCopied] = useState(false);
+  const [state, setState] = useRecoilState(colorState);
+  const copied = useRecoilValue(copiedState);
 
   async function copyToClipboard(text: string) {
     try {
+      setState((oldState) => ({ ...oldState, error: '' }));
       await navigator.clipboard.writeText(text);
-      setCopied(true);
     } catch (err) {
-      setError('Error copying from Clipboard');
+      setState((oldState) => ({
+        ...oldState,
+        error: 'Error copying from Clipboard',
+      }));
     }
   }
 
   useEffect(() => {
     async function handleSetColorOnPaste(event: ClipboardEvent) {
-      const HEX_REGEX = /#?([a-fA-F0-9]{8}|[a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/gi;
-
       if (event.clipboardData) {
         const data = event.clipboardData.getData('Text').trim();
-        try {
-          let convertedColor = '';
-          if (HEX_REGEX.test(data)) {
-            convertedColor = convertColorToRGB(data);
-          } else {
-            convertedColor = convertColorToHex(data);
-          }
-
-          // copyToClipboard(convertedColor);
-          setColor(convertedColor);
-          setError('');
-        } catch (err) {
-          setError('Could not parse color :(');
-        }
+        const newState = swapColor(data, state.color);
+        setState(newState);
       }
     }
 
     window.addEventListener('paste', handleSetColorOnPaste);
     return () => window.removeEventListener('paste', handleSetColorOnPaste);
-  }, [setColor, setError]);
+  }, []);
 
   useEffect(() => {
     async function handleCopyColorToClipboard(event) {
       event.preventDefault();
-      copyToClipboard(color);
+      copyToClipboard(state.color);
     }
 
     window.addEventListener('copy', handleCopyColorToClipboard);
     return () => window.removeEventListener('copy', handleCopyColorToClipboard);
-  }, [color]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (copied) { setCopied(false); }
-    }, 500);
-
-    return () => clearTimeout(timeout);
-  }, [copied]);
-
-  const onSetColor = (newColor: string) => {
-    try {
-      setError('');
-      const parsed = Color(newColor);
-
-      setColor(parsed.toString());
-    } catch (err) {
-      setError('Invalid Color');
-    }
-  };
-
-  const onCopy = () => copyToClipboard(color);
+  }, [state]);
 
   return (
-    <Wrapper color={color}>
-      <InputWrapper>
+    <Wrapper color={state.color}>
+      <RelativeContainer>
         <Tooltip active={copied} />
-        <Input copied={copied} color={color} setColor={onSetColor} onCopy={onCopy} />
-      </InputWrapper>
-      {error && <Error />}
+        <RelativeContainer>
+          <Input />
+          <CopyButton />
+        </RelativeContainer>
+      </RelativeContainer>
+      {state?.error && <Error />}
       <Instructions />
     </Wrapper>
   );

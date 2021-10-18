@@ -1,9 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import Color from './color/color.component';
-import Instructions from './instructions/instructions.component';
+import styled from 'styled-components';
+import Color from 'color';
+
 import Tooltip from './tooltip/tooltip.component';
 import { convertColorToHex, convertColorToRGB } from './utils/utils';
-import ErrorMessage from './error-message/error-message.component';
+import { Input, Error, Instructions } from './components';
+
+const Wrapper = styled.div<{ color: string }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  /* background-color: ${({ color }) => color}; */
+`;
+
+const InputWrapper = styled.div`
+  position: relative;
+`;
 
 function App() {
   function getRandomColor() {
@@ -38,7 +53,7 @@ function App() {
             convertedColor = convertColorToHex(data);
           }
 
-          copyToClipboard(convertedColor);
+          // copyToClipboard(convertedColor);
           setColor(convertedColor);
           setError('');
         } catch (err) {
@@ -69,12 +84,28 @@ function App() {
     return () => clearTimeout(timeout);
   }, [copied]);
 
+  const onSetColor = (newColor: string) => {
+    try {
+      setError('');
+      const parsed = Color(newColor);
+
+      setColor(parsed.toString());
+    } catch (err) {
+      setError('Invalid Color');
+    }
+  };
+
+  const onCopy = () => copyToClipboard(color);
+
   return (
-    <div style={{ position: 'relative' }}>
-      <Tooltip active={copied} />
-      {(error ? <ErrorMessage /> : <Color color={color} copied={copied} />)}
+    <Wrapper color={color}>
+      <InputWrapper>
+        <Tooltip active={copied} />
+        <Input copied={copied} color={color} setColor={onSetColor} onCopy={onCopy} />
+      </InputWrapper>
+      {error && <Error />}
       <Instructions />
-    </div>
+    </Wrapper>
   );
 }
 

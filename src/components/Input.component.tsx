@@ -1,16 +1,18 @@
 import React, { createRef, useEffect, useState } from 'react';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { getContrastingColor, getOpaqueContrastingColor } from '../utils';
-import { CopyButton } from './Copy.component';
 
-export const Wrapper = styled.div`
+import appState, { copiedState } from '../state';
+import { getContrastingColor, swapColor } from '../utils';
+
+const Wrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
   box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
 `;
 
-export const StyledInput = styled.input`
+const StyledInput = styled.input`
   background-color: ${({ color }) => getContrastingColor(color)};
   color: ${({ color }) => color};
   border-radius: ${({ theme }) => theme.borderRadius};
@@ -26,65 +28,45 @@ export const StyledInput = styled.input`
   }
 `;
 
-export const Preview = styled.div<{ color: string }>`
-  position: absolute;
-  top: 15%;
-  right: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 4rem;
-  width: 4rem;
-  border-radius: ${({ theme }) => theme.borderRadius};
-  color: ${({ color }) => getOpaqueContrastingColor(color)};
-  background: ${({ color }) => color};
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
-
-  &:hover {
-    cursor: pointer;
-    color: ${({ color }) => color};
-    background: ${({ color }) => getOpaqueContrastingColor(color)};
-  }
-`;
-
-type Props = {
-  color: string;
-  copied: boolean;
-  onCopy: (copied: boolean) => void;
-  // eslint-disable-next-line
-  setColor: (color: string) => void;
-}
-
-export const Input = ({
-  color, setColor, copied, onCopy,
-}: Props) => {
+export const Input = () => {
   const colorInput = createRef<HTMLInputElement>();
-  const [inputColor, setInputColor] = useState(color);
+  const [state, setState] = useRecoilState(appState);
+  const setCopied = useSetRecoilState(copiedState);
+  const [tempColor, setTempColor] = useState(state.color);
 
   useEffect(() => {
-    if (copied && colorInput.current) {
-      colorInput.current.select();
-    }
-  }, [copied, colorInput]);
+    setTempColor(state.color);
+  }, [state]);
 
-  const handleKeyDown = (event) => {
+  useEffect(() => {
+    async function selectInput(event) {
+      event.preventDefault();
+      colorInput?.current?.select();
+      setCopied(true);
+    }
+
+    window.addEventListener('copy', selectInput);
+    return () => window.removeEventListener('copy', selectInput);
+  }, [colorInput]);
+
+  const onKeyDown = (event) => {
     if (event.key === 'Enter') {
-      setColor(event.target.value);
+      const swapped = swapColor(event.target.value, state.color);
+      setState(swapped);
     }
   };
 
-  const onChange = (event) => setInputColor(event.target.value);
+  const onChange = ({ target: { value } }) => setTempColor(value);
 
   return (
     <Wrapper>
       <StyledInput
         ref={colorInput}
-        color={color}
-        value={inputColor}
-        onKeyDown={handleKeyDown}
+        color={state.color}
+        value={tempColor}
+        onKeyDown={onKeyDown}
         onChange={onChange}
       />
-      <CopyButton color={color} onCopy={onCopy} />
     </Wrapper>
   );
 };

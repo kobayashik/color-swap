@@ -1,84 +1,60 @@
-import React, { useEffect, useState } from 'react';
-import { ThemeProvider } from 'styled-components';
-import Color from './color/color.component';
-import Instructions from './instructions/instructions.component';
-import Tooltip from './tooltip/tooltip.component';
-import { convertColorToHex, convertColorToRGB } from './utils/utils';
-import ErrorMessage from './error-message/error-message.component';
-import { darkTheme, GlobalStyle } from './theme';
+import React, { useEffect } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import styled, { ThemeProvider } from 'styled-components';
+
+import { Input, Instructions } from './components';
+import { appThemeState, colorState, copiedState } from './state';
+import Tooltip from './components/Tooltip.component';
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+`;
+
+const RelativeContainer = styled.div`
+  position: relative;
+`;
 
 function App() {
-  function getRandomColor() {
-    const STARTING_COLORS: string[] = ['#c9f4fe', 'rgb(201, 244, 254)', '#b2f1d8', 'rgb(178, 241, 216)', '#fffee3', 'rgb(255, 254, 227)', '#ffb3c8', 'rgb(255, 179, 200)'];
-    return STARTING_COLORS[Math.floor(Math.random() * STARTING_COLORS.length)];
-  }
-
-  const [color, setColor] = useState<string>(getRandomColor());
-  const [error, setError] = useState<string>('');
-  const [copied, setCopied] = useState(false);
-
-  async function copyToClipboard(text: string) {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-    } catch (err) {
-      setError('Error copying from Clipboard');
-    }
-  }
+  const appTheme = useRecoilValue(appThemeState);
+  const setCopied = useSetRecoilState(copiedState);
+  const setColor = useSetRecoilState(colorState);
 
   useEffect(() => {
-    async function handleSetColorOnPaste(event: ClipboardEvent) {
-      const HEX_REGEX = /#?([a-fA-F0-9]{8}|[a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/gi;
-
-      if (event.clipboardData) {
-        const data = event.clipboardData.getData('Text').trim();
-        try {
-          let convertedColor = '';
-          if (HEX_REGEX.test(data)) {
-            convertedColor = convertColorToRGB(data);
-          } else {
-            convertedColor = convertColorToHex(data);
-          }
-
-          copyToClipboard(convertedColor);
-          setColor(convertedColor);
-          setError('');
-        } catch (err) {
-          setError('Could not parse color :(');
-        }
-      }
-    }
-
-    window.addEventListener('paste', handleSetColorOnPaste);
-    return () => window.removeEventListener('paste', handleSetColorOnPaste);
-  }, [setColor, setError]);
-
-  useEffect(() => {
-    async function handleCopyColorToClipboard(event) {
+    const handleCopyEvent = async (event: ClipboardEvent) => {
       event.preventDefault();
-      copyToClipboard(color);
-    }
+      setCopied(true);
+    };
 
-    window.addEventListener('copy', handleCopyColorToClipboard);
-    return () => window.removeEventListener('copy', handleCopyColorToClipboard);
-  }, [color]);
+    window.addEventListener('copy', handleCopyEvent);
+    return () => window.removeEventListener('copy', handleCopyEvent);
+  }, []);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (copied) { setCopied(false); }
-    }, 500);
+    const handlePasteEvent = async (event: ClipboardEvent) => {
+      if (event.clipboardData) {
+        const newColor = event.clipboardData.getData('Text').trim();
+        setColor(newColor);
+      }
+    };
 
-    return () => clearTimeout(timeout);
-  }, [copied]);
+    window.addEventListener('paste', handlePasteEvent);
+    return () => window.removeEventListener('paste', handlePasteEvent);
+  }, []);
 
   return (
-    <ThemeProvider theme={darkTheme}>
-      <GlobalStyle />
-      <div style={{ position: 'relative' }}>
-        <Tooltip active={copied} />
-        {(error ? <ErrorMessage /> : <Color color={color} copied={copied} />)}
+    <ThemeProvider theme={appTheme}>
+      <Wrapper>
+        <RelativeContainer>
+          <Tooltip />
+          <Input />
+        </RelativeContainer>
         <Instructions />
-      </div>
+      </Wrapper>
     </ThemeProvider>
   );
 }

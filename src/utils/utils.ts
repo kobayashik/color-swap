@@ -1,9 +1,31 @@
-import { fromString } from 'css-color-converter';
+import Color from 'color';
+import { COLORS } from '../constants';
 
-export function convertColorToHex(color: string) {
-  return fromString(color).toHexString();
-}
+export const getRandomColor = () => {
+  const randomIndex = Math.floor(Math.random() * COLORS.length);
+  return COLORS[randomIndex];
+};
 
-export function convertColorToRGB(color: string) {
-  return fromString(color).toRgbString();
-}
+export const swapColor = (color: string, oldColor: string) => {
+  const HEX = /#?([a-fA-F0-9]{8}|[a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/gi;
+
+  try {
+    if (HEX.test(color)) {
+      return Color(color).rgb().string();
+    }
+    return Color(color).hex();
+  } catch (err) {
+    return oldColor;
+  }
+};
+
+export const getColor = (
+  color: Color<string>,
+  darkened: Color<string> | string,
+  lightend: Color<string> | string,
+) => {
+  if (color.luminosity() > 0.7) {
+    return darkened;
+  }
+  return lightend;
+};

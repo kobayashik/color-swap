@@ -1,10 +1,10 @@
+import Color from 'color';
 import { atom, selector } from 'recoil';
-import { getRandomColor, swapColor } from './utils';
+import { getRandomColor, swapColor, getColor } from './utils';
 
 interface State {
   color: string,
   copied: boolean;
-  error: string,
 }
 
 const copiedEffect = () => ({ setSelf, onSet }) => {
@@ -24,7 +24,6 @@ export const appState = atom({
   default: {
     color: getRandomColor(),
     copied: false,
-    error: '',
   },
   effects_UNSTABLE: [
     copiedEffect(),
@@ -48,22 +47,21 @@ export const copiedState = selector({
   set: ({ set, get }, copied: boolean) => set(appState, { ...get(appState), copied }),
 });
 
-export const errorState = selector({
-  key: 'error',
-  get: ({ get }) => get(appState).error,
-});
-
 export const appThemeState = selector({
   key: 'appThemeState',
   get: ({ get }) => {
-    const { color } = get(appState);
+    const color = Color(get(colorState));
 
     return {
       primary: color,
-      secondary: '#FFF',
-      focus: color,
-      input: '#FFF',
-      contrast: '#00FFFF',
+      secondary: '#667085',
+      inputBackground: getColor(color, color.darken(0.7), 'transparent'),
+      inputBackgroundFocus: getColor(color, color.darken(0.6), 'transparent'),
+      inputBorderFocus: getColor(color, color.darken(0.7), color.lighten(0.4)),
+      inputColorFocus: getColor(color, color.darken(0.1), color.lighten(0.2)),
+      border: getColor(color, color.darken(0.7), color),
+      buttonColor: getColor(color, color.darken(0.7), '#fff'),
+      buttonFocus: getColor(color, color.darken(0.1), color.lighten(0.1)),
       borderRadius: '8px',
       error: 'lightcoral',
     };

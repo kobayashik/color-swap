@@ -2,13 +2,9 @@ import React, { useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled, { ThemeProvider } from 'styled-components';
 
-import { Error, Input, Instructions } from './components';
-import CopyButton from './components/buttons/CopyButton.component';
-import {
-  appThemeState, colorState, copiedState, errorState,
-} from './state';
+import { Input, Instructions } from './components';
+import { appThemeState, colorState, copiedState } from './state';
 import Tooltip from './components/Tooltip.component';
-import SwapButton from './components/buttons/SwapButton.component';
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,22 +13,13 @@ const Wrapper = styled.div`
   flex-direction: column;
   width: 100vw;
   height: 100vh;
-  background-color: ${({ theme }) => theme.primary};
 `;
 
 const RelativeContainer = styled.div`
   position: relative;
 `;
 
-const Actions = styled(RelativeContainer)`
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  display: flex;
-`;
-
 function App() {
-  const error = useRecoilValue(errorState);
   const appTheme = useRecoilValue(appThemeState);
   const setCopied = useSetRecoilState(copiedState);
   const setColor = useSetRecoilState(colorState);
@@ -64,15 +51,8 @@ function App() {
       <Wrapper>
         <RelativeContainer>
           <Tooltip />
-          <RelativeContainer>
-            <Input />
-            <Actions>
-              <CopyButton />
-              <SwapButton />
-            </Actions>
-          </RelativeContainer>
+          <Input />
         </RelativeContainer>
-        {error && <Error />}
         <Instructions />
       </Wrapper>
     </ThemeProvider>

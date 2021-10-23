@@ -18,3 +18,14 @@ export const swapColor = (color: string, oldColor: string) => {
     return oldColor;
   }
 };
+
+export const getColor = (
+  color: Color<string>,
+  darkened: Color<string> | string,
+  lightend: Color<string> | string,
+) => {
+  if (color.luminosity() > 0.7) {
+    return darkened;
+  }
+  return lightend;
+};

@@ -14,7 +14,7 @@ const SwapButton = () => {
 
   return (
     <Button type="button" onClick={onClick}>
-      <SwitchHorizontalIcon />
+      <SwitchHorizontalIcon width="40" />
     </Button>
   );
 };

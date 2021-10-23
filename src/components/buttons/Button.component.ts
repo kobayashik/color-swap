@@ -4,22 +4,34 @@ export const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 4rem;
-  width: 4rem;
+  flex: 1;
+  padding: 0.7rem 1.5rem;
   border: none;
+  border: 2px solid ${({ theme }) => theme.border};
   border-radius: ${({ theme }) => theme.borderRadius};
-  color: ${({ theme }) => theme.input};
+  color: ${({ theme }) => theme.buttonColor};
   background: ${({ theme }) => theme.primary};
-  box-shadow: rgba(0, 0, 0, 0.1) 0 0 5px 0, rgba(0, 0, 0, 0.1) 0 0 1px 0;
+  box-shadow: 0 3px 7px 2px rgba(0, 0, 0, 0.2);
 
   &:not(:last-of-type) {
-    margin-right: 16px;
+    margin: 0 1rem 0 0;
+  }
+
+  @media only screen and (max-width: 550px) {
+    padding: 0.4rem;
+
+    &:not(:last-of-type) {
+      margin: 0 0 1rem 0;
+    }
   }
 
   &:hover {
     cursor: pointer;
-    color: ${({ theme }) => theme.primary};
-    background: ${({ theme }) => theme.focus};
+    background: ${({ theme }) => theme.buttonFocus};
+  }
+
+  &:active {
+    background: ${({ theme }) => theme.primary};
   }
 `;
 

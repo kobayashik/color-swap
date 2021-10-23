@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: source-code-pro, Consolas, monaco, monospace;
+  font-family: 'Source Sans Pro', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -8,8 +8,9 @@ body {
   margin: 0;
   height: 100vh;
   width: 100vw;
-  background-color: #3a3d46;
+  /* background-color: #344054; */
 }
+
 
 p {
   margin: 0;

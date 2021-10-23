@@ -3,28 +3,39 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 import { colorState, copiedState } from '../state';
+import CopyButton from './buttons/CopyButton.component';
+import SwapButton from './buttons/SwapButton.component';
 
-const Wrapper = styled.div`
-  position: relative;
+const Actions = styled.div`
   display: flex;
-  align-items: center;
-  box-shadow: rgba(33, 35, 38, 0.1) 0 10px 10px -10px;
+  margin-top: 1rem;
+
+  @media only screen and (max-width: 550px) {
+    flex-direction: column;
+  }
 `;
 
 const StyledInput = styled.input`
-  background-color: ${({ theme }) => theme.input};
+  background-color: ${({ theme }) => theme.inputBackground};
   color: ${({ theme }) => theme.primary};
   border-radius: ${({ theme }) => theme.borderRadius};
-  border: 1px solid ${({ theme }) => theme.primary};
-  max-width: 610px;
+  border: 2px solid ${({ theme }) => theme.border};
   padding: 10px 20px;
-  font-size: 3.5rem;
-  font-weight: bold;
-  outline:none;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 500;
+  outline: none;
   box-shadow: 0 3px 7px 2px rgba(0, 0, 0, 0.2);
 
   &:focus {
-    border-color: ${({ theme }) => theme.primary};
+    background-color: ${({ theme }) => theme.inputBackgroundFocus};
+    color: ${({ theme }) => theme.inputColorFocus};
+    border-color: ${({ theme }) => theme.inputBorderFocus};
+  }
+
+  @media only screen and (max-width: 550px) {
+    max-width: 300px;
+    font-size: 1.7rem;
   }
 `;
 
@@ -55,15 +66,23 @@ export const Input = () => {
     setTempColor(value);
   };
 
+  const onPaste = (e: ClipboardEvent) => e.preventDefault();
+
   return (
-    <Wrapper>
+    <>
       <StyledInput
+        onPaste={onPaste}
         ref={colorInput}
         value={tempColor}
         onKeyDown={onKeyDown}
         onChange={onChange}
       />
-    </Wrapper>
+
+      <Actions>
+        <CopyButton />
+        <SwapButton />
+      </Actions>
+    </>
   );
 };
 

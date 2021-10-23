@@ -1,4 +1,4 @@
-export const STARTING_COLORS: string[] = [
+export const COLORS: string[] = [
   '#c9f4fe',
   'rgb(201, 244, 254)',
   '#b2f1d8',
@@ -9,4 +9,4 @@ export const STARTING_COLORS: string[] = [
   'rgb(255, 179, 200)',
 ];
 
-export default STARTING_COLORS;
+export default COLORS;

@@ -1,78 +1,81 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import styled, { ThemeProvider } from 'styled-components';
 
-import Tooltip from './tooltip/tooltip.component';
-import { swapColor } from './utils/utils';
-import { Input, Error, Instructions } from './components';
-import colorState, { copiedState } from './state';
-import CopyButton from './components/Copy.component';
+import { Error, Input, Instructions } from './components';
+import CopyButton from './components/buttons/CopyButton.component';
+import {
+  appThemeState, colorState, copiedState, errorState,
+} from './state';
+import Tooltip from './components/Tooltip.component';
+import SwapButton from './components/buttons/SwapButton.component';
 
-const Wrapper = styled.div<{ color: string }>`
+const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   width: 100vw;
   height: 100vh;
-  /* background-color: ${({ color }) => color}; */
+  background-color: ${({ theme }) => theme.primary};
 `;
 
 const RelativeContainer = styled.div`
   position: relative;
 `;
 
-function App() {
-  const [state, setState] = useRecoilState(colorState);
-  const copied = useRecoilValue(copiedState);
+const Actions = styled(RelativeContainer)`
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  display: flex;
+`;
 
-  async function copyToClipboard(text: string) {
-    try {
-      setState((oldState) => ({ ...oldState, error: '' }));
-      await navigator.clipboard.writeText(text);
-    } catch (err) {
-      setState((oldState) => ({
-        ...oldState,
-        error: 'Error copying from Clipboard',
-      }));
-    }
-  }
+function App() {
+  const error = useRecoilValue(errorState);
+  const appTheme = useRecoilValue(appThemeState);
+  const setCopied = useSetRecoilState(copiedState);
+  const setColor = useSetRecoilState(colorState);
 
   useEffect(() => {
-    async function handleSetColorOnPaste(event: ClipboardEvent) {
-      if (event.clipboardData) {
-        const data = event.clipboardData.getData('Text').trim();
-        const newState = swapColor(data, state.color);
-        setState(newState);
-      }
-    }
+    const handleCopyEvent = async (event: ClipboardEvent) => {
+      event.preventDefault();
+      setCopied(true);
+    };
 
-    window.addEventListener('paste', handleSetColorOnPaste);
-    return () => window.removeEventListener('paste', handleSetColorOnPaste);
+    window.addEventListener('copy', handleCopyEvent);
+    return () => window.removeEventListener('copy', handleCopyEvent);
   }, []);
 
   useEffect(() => {
-    async function handleCopyColorToClipboard(event) {
-      event.preventDefault();
-      copyToClipboard(state.color);
-    }
+    const handlePasteEvent = async (event: ClipboardEvent) => {
+      if (event.clipboardData) {
+        const newColor = event.clipboardData.getData('Text').trim();
+        setColor(newColor);
+      }
+    };
 
-    window.addEventListener('copy', handleCopyColorToClipboard);
-    return () => window.removeEventListener('copy', handleCopyColorToClipboard);
-  }, [state]);
+    window.addEventListener('paste', handlePasteEvent);
+    return () => window.removeEventListener('paste', handlePasteEvent);
+  }, []);
 
   return (
-    <Wrapper color={state.color}>
-      <RelativeContainer>
-        <Tooltip active={copied} />
+    <ThemeProvider theme={appTheme}>
+      <Wrapper>
         <RelativeContainer>
-          <Input />
-          <CopyButton />
+          <Tooltip />
+          <RelativeContainer>
+            <Input />
+            <Actions>
+              <CopyButton />
+              <SwapButton />
+            </Actions>
+          </RelativeContainer>
         </RelativeContainer>
-      </RelativeContainer>
-      {state?.error && <Error />}
-      <Instructions />
-    </Wrapper>
+        {error && <Error />}
+        <Instructions />
+      </Wrapper>
+    </ThemeProvider>
   );
 }
 

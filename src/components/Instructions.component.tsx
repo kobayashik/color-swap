@@ -4,7 +4,7 @@ import styled from 'styled-components';
 export const StyledInstructions = styled.div`
   margin-top: 0.5rem;
   font-weight: 500;
-  color: #fff9;
+  color: ${({ theme }) => theme.secondary};
 `;
 
 export const Instructions = () => <StyledInstructions>Paste to convert color</StyledInstructions>;

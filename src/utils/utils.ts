@@ -1,36 +1,20 @@
-import { fromString } from 'css-color-converter';
 import Color from 'color';
+import { COLORS } from '../constants';
 
-export const convertColorToHex = (color: string) => fromString(color).toHexString();
-
-export const convertColorToRGB = (color: string) => fromString(color).toRgbString();
-
-export const getContrastingColor = (color: string) => {
-  try {
-    const initial = Color(color);
-    const lightness = initial.lightness();
-    const darkened = initial.darken(0.1).fade(0.6).string();
-    const lightened = initial.lightness(lightness + 80).fade(0.8).string();
-
-    return initial.isLight() ? darkened : lightened;
-  } catch (err) {
-    console.log(err);
-  }
-
-  return null;
+export const getRandomColor = () => {
+  const randomIndex = Math.floor(Math.random() * COLORS.length);
+  return COLORS[randomIndex];
 };
 
-export const getOpaqueContrastingColor = (color: string) => {
+export const swapColor = (color: string, oldColor: string) => {
+  const HEX = /#?([a-fA-F0-9]{8}|[a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/gi;
+
   try {
-    const initial = Color(color);
-    const lightness = initial.lightness();
-    const darkened = initial.darken(0.8).opaquer(1).string();
-    const lightened = initial.lightness(lightness + 80).opaquer(1).string();
-
-    return initial.isLight() ? darkened : lightened;
+    if (HEX.test(color)) {
+      return Color(color).rgb().string();
+    }
+    return Color(color).hex();
   } catch (err) {
-    console.log(err);
+    return oldColor;
   }
-
-  return null;
 };

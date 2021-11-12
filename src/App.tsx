@@ -5,6 +5,8 @@ import styled, { ThemeProvider } from 'styled-components';
 import { Input, Instructions } from './components';
 import { appThemeState, colorState, copiedState } from './state';
 import Tooltip from './components/Tooltip.component';
+import CopyButton from './components/buttons/CopyButton.component';
+import SwapButton from './components/buttons/SwapButton.component';
 
 const Wrapper = styled.div`
   display: flex;
@@ -13,10 +15,17 @@ const Wrapper = styled.div`
   flex-direction: column;
   width: 100vw;
   height: 100vh;
+  background-color: ${({ theme }) => theme.background};
 `;
 
 const RelativeContainer = styled.div`
+  display: flex;
   position: relative;
+  background-color: ${({ theme }) => theme.inputBackground};
+  border: 2px solid ${({ theme }) => theme.primary};
+  border-radius: ${({ theme }) => theme.borderRadius};
+  padding: 0.6rem;
+  box-shadow: 0 3px 7px 2px rgba(0, 0, 0, 0.2);
 `;
 
 function App() {
@@ -52,6 +61,8 @@ function App() {
         <RelativeContainer>
           <Tooltip />
           <Input />
+          <CopyButton />
+          <SwapButton />
         </RelativeContainer>
         <Instructions />
       </Wrapper>

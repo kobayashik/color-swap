@@ -5,7 +5,8 @@ export const Button = styled.button`
   align-items: center;
   justify-content: center;
   flex: 1;
-  padding: 0.7rem 1.5rem;
+  padding: 0.5rem;
+  margin: 0 0 0 1rem;
   border: none;
   border: 2px solid ${({ theme }) => theme.border};
   border-radius: ${({ theme }) => theme.borderRadius};
@@ -14,7 +15,7 @@ export const Button = styled.button`
   box-shadow: 0 3px 7px 2px rgba(0, 0, 0, 0.2);
 
   &:not(:last-of-type) {
-    margin: 0 1rem 0 0;
+    margin: 0 0 0 1rem;
   }
 
   @media only screen and (max-width: 550px) {

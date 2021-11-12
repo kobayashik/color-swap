@@ -10,7 +10,7 @@ const StyledTooltip = styled.p<{ active: boolean }>`
   left: 50%;
   z-index: 1;
   width: 150px;
-  font-size: 2rem;
+  font-size: 1.5rem;
   text-align: center;
   padding: 5px 0;
   margin-left: -60px;

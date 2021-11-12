@@ -7,7 +7,7 @@ import { colorState, copiedState } from '../state';
 const StyledInput = styled.input<{ width: number }>`
   width: ${({ width }) => width}ch;
   background-color: transparent;
-  color: ${({ theme }) => theme.primary};
+  color: ${({ theme }) => theme.input};
   padding: 0 0.6rem;
   text-align: center;
   font-size: 2rem;
@@ -15,12 +15,6 @@ const StyledInput = styled.input<{ width: number }>`
   border: none;
   outline: none;
   transition: width 0.3s cubic-bezier(0.215, 0.610, 0.355, 1);
-
-  &:focus {
-    background-color: ${({ theme }) => theme.inputBackgroundFocus};
-    color: ${({ theme }) => theme.inputColorFocus};
-    border-color: ${({ theme }) => theme.inputBorderFocus};
-  }
 
   @media only screen and (max-width: 550px) {
     max-width: 300px;

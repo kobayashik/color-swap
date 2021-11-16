@@ -13,8 +13,8 @@ const CopyButton = () => {
   };
 
   return (
-    <Button type="button" onClick={onClick}>
-      <ClipboardCopyIcon width="36" />
+    <Button type="button" label="copy" onClick={onClick}>
+      <ClipboardCopyIcon width="28" />
     </Button>
   );
 };

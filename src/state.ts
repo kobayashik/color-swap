@@ -54,11 +54,8 @@ export const appThemeState = selector({
 
     return {
       primary: color,
-      secondary: '#667085',
-      inputBackground: getColor(color, color.darken(0.7), 'transparent'),
-      inputBackgroundFocus: getColor(color, color.darken(0.6), 'transparent'),
-      inputBorderFocus: getColor(color, color.darken(0.7), color.lighten(0.4)),
-      inputColorFocus: getColor(color, color.darken(0.1), color.lighten(0.2)),
+      instructions: '#7b8eac',
+      input: '#1F2937',
       border: getColor(color, color.darken(0.7), color),
       buttonColor: getColor(color, color.darken(0.7), '#fff'),
       buttonFocus: getColor(color, color.darken(0.1), color.lighten(0.1)),

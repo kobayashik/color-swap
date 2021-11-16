@@ -5,7 +5,7 @@ export const StyledInstructions = styled.div`
   margin-top: 0.7rem;
   font-size: 1.2rem;
   font-weight: 500;
-  color: ${({ theme }) => theme.secondary};
+  color: ${({ theme }) => theme.instructions};
 `;
 
 export const Instructions = () => <StyledInstructions>Paste to convert color</StyledInstructions>;

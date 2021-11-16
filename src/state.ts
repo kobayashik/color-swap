@@ -54,7 +54,7 @@ export const appThemeState = selector({
 
     return {
       primary: color,
-      secondary: '#667085',
+      instructions: '#7b8eac',
       input: '#1F2937',
       border: getColor(color, color.darken(0.7), color),
       buttonColor: getColor(color, color.darken(0.7), '#fff'),

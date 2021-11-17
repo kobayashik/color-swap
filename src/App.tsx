@@ -5,8 +5,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { Input, Instructions } from './components';
 import { appThemeState, colorState, copiedState } from './state';
 import Tooltip from './components/Tooltip.component';
-import CopyButton from './components/buttons/CopyButton.component';
-import SwapButton from './components/buttons/SwapButton.component';
+import { CopyButton, SwapButton } from './components/Button.component';
 
 const Wrapper = styled.div`
   display: flex;
@@ -61,8 +60,12 @@ function App() {
         <RelativeContainer>
           <Tooltip />
           <Input />
-          <CopyButton />
-          <SwapButton />
+          <span>
+            <CopyButton />
+          </span>
+          <span>
+            <SwapButton />
+          </span>
         </RelativeContainer>
         <Instructions />
       </Wrapper>

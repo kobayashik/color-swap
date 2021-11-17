@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { colorState, copiedState } from '../state';
 
 const StyledInput = styled.input<{ width: number }>`
-  width: ${({ width }) => width}ch;
+  width: ${({ width }) => width * 1.5}rem;
   background-color: transparent;
   color: ${({ theme }) => theme.input};
   padding: 0 0.6rem;
@@ -52,7 +52,7 @@ export const Input = () => {
   const onPaste = (e: ClipboardEvent) => e.preventDefault();
 
   const getInputWidth = () => Math.max(tempColor
-    .replaceAll(/[\s,]/g, '')
+    .replaceAll(/[\s,()]/g, '')
     .length, 4);
 
   return (

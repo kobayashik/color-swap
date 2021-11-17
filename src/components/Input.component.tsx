@@ -55,7 +55,7 @@ export const Input = () => {
     <StyledInput
       label="color"
       width={getInputWidth()}
-      maxLength={23}
+      maxLength={24}
       ref={colorInput}
       value={tempColor}
       onPaste={onPaste}

@@ -57,6 +57,7 @@ export const Input = () => {
 
   return (
     <StyledInput
+      label="color"
       onPaste={onPaste}
       ref={colorInput}
       value={tempColor}

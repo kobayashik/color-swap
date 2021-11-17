@@ -8,6 +8,6 @@ export const StyledInstructions = styled.div`
   color: ${({ theme }) => theme.instructions};
 `;
 
-export const Instructions = () => <StyledInstructions>Paste to convert color</StyledInstructions>;
+export const Instructions = () => <StyledInstructions>Paste color to convert</StyledInstructions>;
 
 export default Instructions;

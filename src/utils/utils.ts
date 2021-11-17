@@ -1,4 +1,5 @@
 import Color from 'color';
+import { fromString } from 'css-color-converter';
 import { COLORS } from '../constants';
 
 export const getRandomColor = () => {
@@ -7,13 +8,15 @@ export const getRandomColor = () => {
 };
 
 export const swapColor = (color: string, oldColor: string) => {
-  const HEX = /#?([a-fA-F0-9]{8}|[a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/gi;
+  const parsedColor = fromString(color);
 
   try {
+    const HEX = /#?([a-fA-F0-9]{8}|[a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/gi;
+
     if (HEX.test(color)) {
-      return Color(color).rgb().string();
+      return parsedColor.toRgbString();
     }
-    return Color(color).hex();
+    return parsedColor.toHexString();
   } catch (err) {
     return oldColor;
   }

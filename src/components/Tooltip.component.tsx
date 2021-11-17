@@ -7,15 +7,15 @@ import { copiedState } from '../state';
 const StyledTooltip = styled.p<{ active: boolean }>`
   position: absolute;
   bottom: 110%;
-  left: 50%;
+  left: 45%;
   z-index: 1;
   width: 150px;
   font-size: 1.5rem;
   text-align: center;
   padding: 5px 0;
   margin-left: -60px;
-  color: #fff;
-  background-color: #555;
+  color: white;
+  background-color: ${({ theme }) => theme.input};
   border-radius: 6px;
   opacity: ${({ active }) => (active ? 1 : 0)};
   transition: opacity 0.4s ease;
@@ -23,10 +23,10 @@ const StyledTooltip = styled.p<{ active: boolean }>`
   &:after {
     position: absolute;
     top: 100%;
-    left: 50%;
+    left: 45%;
     border-width: 10px;
     border-style: solid;
-    border-color: #555 transparent transparent transparent;
+    border-color: ${({ theme }) => theme.input} transparent transparent transparent;
     margin-left: -10px;
     content: "";
   }

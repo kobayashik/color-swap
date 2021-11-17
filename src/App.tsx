@@ -19,12 +19,17 @@ const Wrapper = styled.div`
 
 const RelativeContainer = styled.div`
   display: flex;
+  gap: 1rem;
   position: relative;
   background-color: ${({ theme }) => theme.inputBackground};
   border: 2px solid ${({ theme }) => theme.border};
   border-radius: ${({ theme }) => theme.borderRadius};
   padding: 0.6rem;
   box-shadow: 0 3px 7px 2px rgba(0, 0, 0, 0.2);
+
+  @media only screen and (max-width: 550px) {
+    flex-direction: column;
+  }
 `;
 
 function App() {

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { colorState, copiedState } from '../state';
 
 const StyledInput = styled.input<{ width: number }>`
+  max-width: 350px;
   width: ${({ width }) => width * 1.5}rem;
   background-color: transparent;
   color: ${({ theme }) => theme.input};
@@ -15,11 +16,6 @@ const StyledInput = styled.input<{ width: number }>`
   border: none;
   outline: none;
   transition: width 0.3s cubic-bezier(0.215, 0.610, 0.355, 1);
-
-  @media only screen and (max-width: 550px) {
-    max-width: 300px;
-    font-size: 1.7rem;
-  }
 `;
 
 export const Input = () => {
@@ -58,12 +54,13 @@ export const Input = () => {
   return (
     <StyledInput
       label="color"
-      onPaste={onPaste}
+      width={getInputWidth()}
+      maxLength={23}
       ref={colorInput}
       value={tempColor}
+      onPaste={onPaste}
       onKeyDown={onKeyDown}
       onChange={onChange}
-      width={getInputWidth()}
     />
   );
 };

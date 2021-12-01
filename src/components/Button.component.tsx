@@ -1,10 +1,7 @@
 import React from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import ClipboardCopyIcon from '@heroicons/react/outline/ClipboardCopyIcon';
 import SwitchHorizontalIcon from '@heroicons/react/outline/SwitchHorizontalIcon';
-
-import { colorState, copiedState } from '../state';
 
 export const Button = styled.button`
   display: flex;
@@ -33,32 +30,20 @@ export const Button = styled.button`
   }
 `;
 
-export const CopyButton = () => {
-  const setCopied = useSetRecoilState(copiedState);
+type Props = {
+  onClick: () => void;
+}
 
-  const onClick = () => {
-    setCopied(true);
-  };
+export const CopyButton = ({ onClick }: Props) => (
+  <Button type="button" name="copy" label="copy" onClick={onClick}>
+    <ClipboardCopyIcon width="28" />
+  </Button>
+);
 
-  return (
-    <Button type="button" name="copy" label="copy" onClick={onClick}>
-      <ClipboardCopyIcon width="28" />
-    </Button>
-  );
-};
-
-export const SwapButton = () => {
-  const [color, setColor] = useRecoilState(colorState);
-
-  const onClick = () => {
-    setColor(color);
-  };
-
-  return (
-    <Button type="button" name="swap" label="swap" onClick={onClick}>
-      <SwitchHorizontalIcon width="28" />
-    </Button>
-  );
-};
+export const SwapButton = ({ onClick }: Props) => (
+  <Button type="button" name="swap" label="swap" onClick={onClick}>
+    <SwitchHorizontalIcon width="28" />
+  </Button>
+);
 
 export default Button;

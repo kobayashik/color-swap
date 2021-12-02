@@ -1,4 +1,6 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, {
+  forwardRef, useEffect, useState,
+} from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { colorState } from '../state';
@@ -33,7 +35,10 @@ export const Input = forwardRef((props, ref) => {
     }
   };
 
-  const onChange = ({ target: { value } }) => setTempColor(value);
+  const onChange = ({ target: { value } }) => {
+    const validCharacters = /[^r|g|b|a(,;#.0-9A-Fa-f\s]/g;
+    setTempColor(value?.replaceAll(validCharacters, ''));
+  };
 
   const onPaste = (e: ClipboardEvent) => e.preventDefault();
 

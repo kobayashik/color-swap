@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled, { ThemeProvider } from 'styled-components';
 
@@ -32,31 +32,43 @@ const RelativeContainer = styled.div`
   }
 `;
 
+const ButtonContainer = styled.div``;
+
 function App() {
   const appTheme = useRecoilValue(appThemeState);
   const setCopied = useSetRecoilState(copiedState);
   const setColor = useSetRecoilState(colorState);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleCopy = () => {
+    if (inputRef.current) {
+      inputRef.current.select();
+      navigator.clipboard.writeText(inputRef.current?.value || '');
+      setCopied(true);
+    }
+  };
+
+  const handlePaste = (e: ClipboardEvent) => {
+    if (e.clipboardData) {
+      const text = e.clipboardData.getData('text');
+      setColor(text);
+    }
+  };
+
+  const handleSwap = () => {
+    if (inputRef.current) {
+      setColor(inputRef.current.value);
+    }
+  };
 
   useEffect(() => {
-    const handleCopyEvent = async (event: ClipboardEvent) => {
-      event.preventDefault();
-      setCopied(true);
-    };
-
-    window.addEventListener('copy', handleCopyEvent);
-    return () => window.removeEventListener('copy', handleCopyEvent);
+    window.addEventListener('copy', handleCopy);
+    return () => window.removeEventListener('copy', handleCopy);
   }, []);
 
   useEffect(() => {
-    const handlePasteEvent = async (event: ClipboardEvent) => {
-      if (event.clipboardData) {
-        const newColor = event.clipboardData.getData('Text').trim();
-        setColor(newColor);
-      }
-    };
-
-    window.addEventListener('paste', handlePasteEvent);
-    return () => window.removeEventListener('paste', handlePasteEvent);
+    window.addEventListener('paste', handlePaste);
+    return () => window.removeEventListener('paste', handlePaste);
   }, []);
 
   return (
@@ -64,13 +76,13 @@ function App() {
       <Wrapper>
         <RelativeContainer>
           <Tooltip />
-          <Input />
-          <span>
-            <CopyButton />
-          </span>
-          <span>
-            <SwapButton />
-          </span>
+          <Input ref={inputRef} />
+          <ButtonContainer>
+            <CopyButton onClick={handleCopy} />
+          </ButtonContainer>
+          <ButtonContainer>
+            <SwapButton onClick={handleSwap} />
+          </ButtonContainer>
         </RelativeContainer>
         <Instructions />
       </Wrapper>

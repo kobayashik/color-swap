@@ -9,10 +9,9 @@ interface State {
 
 const copiedEffect = () => ({ setSelf, onSet }) => {
   onSet(async (state: State) => {
-    const { copied, color } = state;
+    const { copied } = state;
 
     if (!copied) return null;
-    await navigator.clipboard.writeText(color);
 
     const timeout = setTimeout(() => setSelf({ ...state, copied: false }), 10);
     return () => clearTimeout(timeout);

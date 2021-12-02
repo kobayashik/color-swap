@@ -1,8 +1,7 @@
-import React, { createRef, useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import React, { forwardRef, useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-
-import { colorState, copiedState } from '../state';
+import { colorState } from '../state';
 
 const StyledInput = styled.input<{ width: number }>`
   max-width: 350px;
@@ -18,17 +17,11 @@ const StyledInput = styled.input<{ width: number }>`
   transition: width 0.3s cubic-bezier(0.215, 0.610, 0.355, 1);
 `;
 
-export const Input = () => {
-  const colorInput = createRef<HTMLInputElement>();
-  const [color, setColor] = useRecoilState(colorState);
-  const copied = useRecoilValue(copiedState);
-  const [tempColor, setTempColor] = useState(color);
+const calculateWidth = (value: string) => Math.max(value.replaceAll(/[\s,()]/g, '').length, 4);
 
-  useEffect(() => {
-    if (copied) {
-      colorInput?.current?.select();
-    }
-  }, [copied]);
+export const Input = forwardRef((props, ref) => {
+  const [color, setColor] = useRecoilState(colorState);
+  const [tempColor, setTempColor] = useState(color);
 
   useEffect(() => {
     setTempColor(color);
@@ -36,33 +29,26 @@ export const Input = () => {
 
   const onKeyDown = (event: { key: string, target: HTMLInputElement }) => {
     if (event.key === 'Enter') {
-      const newColor = event.target.value;
-      setColor(newColor);
+      setColor(event.target.value);
     }
   };
 
-  const onChange = ({ target: { value } }) => {
-    setTempColor(value);
-  };
+  const onChange = ({ target: { value } }) => setTempColor(value);
 
   const onPaste = (e: ClipboardEvent) => e.preventDefault();
-
-  const getInputWidth = () => Math.max(tempColor
-    .replaceAll(/[\s,()]/g, '')
-    .length, 4);
 
   return (
     <StyledInput
       label="color"
-      width={getInputWidth()}
+      width={calculateWidth(tempColor)}
       maxLength={24}
-      ref={colorInput}
+      ref={ref}
       value={tempColor}
       onPaste={onPaste}
       onKeyDown={onKeyDown}
       onChange={onChange}
     />
   );
-};
+});
 
 export default Input;

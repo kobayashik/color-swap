@@ -36,7 +36,7 @@ export const Input = forwardRef((props, ref) => {
   };
 
   const onChange = ({ target: { value } }) => {
-    const validCharacters = /[^r|g|b|a(,;#.0-9A-Fa-f\s]/g;
+    const validCharacters = /[^r|g|b|a(),;#.0-9A-Fa-f\s]/g;
     setTempColor(value?.replaceAll(validCharacters, ''));
   };
 

@@ -59,7 +59,7 @@ export const appThemeState = selector({
       buttonColor: getColor(color, color.darken(0.7), '#fff'),
       buttonFocus: getColor(color, color.darken(0.1), color.lighten(0.1)),
       borderRadius: '8px',
-      error: 'lightcoral',
+      background: '#222831',
     };
   },
 });

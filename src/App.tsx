@@ -21,7 +21,7 @@ const RelativeContainer = styled.div`
   display: flex;
   gap: 1rem;
   position: relative;
-  background-color: ${({ theme }) => theme.inputBackground};
+  background-color: #fff;
   border: 2px solid ${({ theme }) => theme.border};
   border-radius: ${({ theme }) => theme.borderRadius};
   padding: 0.6rem;

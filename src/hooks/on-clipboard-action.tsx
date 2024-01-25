@@ -17,6 +17,7 @@ export const useOnClipboardAction = ({
     };
 
     const handlePaste = (event: ClipboardEvent) => {
+      event.preventDefault();
       const pasteData = event.clipboardData?.getData('text/plain');
 
       if (pasteData) {
